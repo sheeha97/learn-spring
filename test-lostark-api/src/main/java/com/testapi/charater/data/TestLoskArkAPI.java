@@ -28,21 +28,24 @@ public class TestLoskArkAPI {
 	
 	private static void getCharacterInfo() throws IOException{
 		// https://developer-lostark.game.onstove.com/characters/행복한몰리/siblings
-        // 3. URL 객체 생성.
+        //URL 객체 생성
         URL url = new URL("https://developer-lostark.game.onstove.com/characters/%ED%96%89%EB%B3%B5%ED%95%9C%EB%AA%B0%EB%A6%AC/siblings");
-        // 4. 요청하고자 하는 URL과 통신하기 위한 Connection 객체 생성.
+       
+        // 요청하고자 하는 URL과 통신하기 위한 Connection 객체 생성.
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         
-        // 5. 통신을 위한 메소드 SET.
+        // 통신을 위한 메소드 GET.
         conn.setRequestMethod("GET");
-        // 5.1 통신을 위한 authorization
+        // 통신을 위한 authorization with the loskapkapikey this needs to be edited
         conn.setRequestProperty("authorization", "Bearer "+ LostArkApiKey);
-        // 6. 통신을 위한 Content-type SET. 
+        
+        // 통신을 위한 Content-type SET. 
         conn.setRequestProperty("content-type", "application/json");
-        // 7. 통신 응답 코드 확인.
+        
+        //통신 응답 코드 확인.
         System.out.println("Response code: " + conn.getResponseCode());
         
-        // 8. 전달받은 데이터를 BufferedReader 객체로 저장.
+        // 전달받은 데이터를 BufferedReader 객체로 저장W
         BufferedReader rd;
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -50,54 +53,56 @@ public class TestLoskArkAPI {
             rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
         }
         
-        // 9. 저장된 데이터를 라인별로 읽어 StringBuilder 객체로 저장.
+        // 저장된 데이터를 라인별로 읽어 StringBuilder 객체로 저장.
         StringBuilder sb = new StringBuilder();
         String line;
         while ((line = rd.readLine()) != null) {
             sb.append(line);
         }
-        // 10. 객체 해제.
+        
         rd.close();
         conn.disconnect();
-        // 11. 전달받은 데이터 확인.
+        // 전달받은 데이터 개시.
         System.out.println("캐릭터 정보 개시");
         System.out.println(sb.toString());
 	}
 	
-	private static void getAccesory() throws Exception{
-		// https://developer-lostark.game.onstove.com/characters/행복한몰리/siblings
-        
-		// java json path
+	private static void getAccesory() throws Exception{  
+		// java json file path
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		s += "\\src\\main\\java\\json\\test.json";
+		
+		// construct 한 path
 		System.out.println(s);
+		
 		String json;
 		try {
 			json = readFileAsString(s);
 			System.out.println(json);
-			// 3. URL 객체 생성.
+			// URL 객체 생성.
 	        URL url = new URL("https://developer-lostark.game.onstove.com/auctions/items");
-	        // 4. 요청하고자 하는 URL과 통신하기 위한 Connection 객체 생성.
+	        // 요청하고자 하는 URL과 통신하기 위한 Connection 객체 생성.
 	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	        
-	        // 5. 통신을 위한 메소드 SET.
+	        // 통신을 위한 메소드 POST.
 	        conn.setRequestMethod("POST");
-	        // 5.1 통신을 위한 authorization
+	        // 통신을 위한 authorization
 	        conn.setRequestProperty("authorization", "Bearer "+ LostArkApiKey);
-	        // 6. 통신을 위한 Content-type SET. 
+	        // 통신을 위한 Content-type SET. 
 	        conn.setRequestProperty("content-Type", "application/json");
 	        conn.setRequestProperty("accept", "application/json");
 	        conn.setDoOutput(true);
 	        
+	        // json file이 string 형태인것을 byte 그 후 outputstream
 	        byte[] out = json.getBytes(StandardCharsets.UTF_8);
 	        OutputStream stream = conn.getOutputStream();
 	        stream.write(out);
 	        
-	        // 7. 통신 응답 코드 확인.
+	        // 응답 코드 확인.
 	        System.out.println("Response code: " + conn.getResponseCode());
 	        
-	        // 8. 전달받은 데이터를 BufferedReader 객체로 저장.
+	        // 전달받은 데이터를 BufferedReader 객체로 저장.
 	        BufferedReader rd;
 	        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
 	            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -105,17 +110,17 @@ public class TestLoskArkAPI {
 	            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
 	        }
 	        
-	        // 9. 저장된 데이터를 라인별로 읽어 StringBuilder 객체로 저장.
+	        // 저장된 데이터를 라인별로 읽어 StringBuilder 객체로 저장.
 	        StringBuilder sb = new StringBuilder();
 	        String line;
 	        while ((line = rd.readLine()) != null) {
 	            sb.append(line);
 	        }
-	        // 10. 객체 해제.
+	        
 	        rd.close();
 	        conn.disconnect();
-	        // 11. 전달받은 데이터 확인.
-	        System.out.println("캐릭터 정보 개시");
+	        // 전달받은 데이터 확인.
+	        System.out.println("목걸이 정보 개시");
 	        System.out.println(sb.toString());
 		} catch (Exception e) {
 			e.printStackTrace();	
