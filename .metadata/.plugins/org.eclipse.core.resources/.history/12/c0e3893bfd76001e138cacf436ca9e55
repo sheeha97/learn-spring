@@ -1,0 +1,12 @@
+package com.in28minutes.learnspringframework;
+
+public class App02HelloWorldSpring {
+
+	public static void main(String[] args) {
+		// Launch a Spring Context
+		//Configure the things that we want Spring to manage
+		
+		
+	}
+
+}
